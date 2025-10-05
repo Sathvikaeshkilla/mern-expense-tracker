@@ -86,4 +86,19 @@ router.put("/:id", protect, async (req, res) => {
   }
 });
 
+// @route   DELETE /api/expenses/:id
+// @desc    Delete an expense (owner only)
+router.delete('/:id', protect, async (req, res) => {
+  try {
+    const expense = await Expense.findOne({ _id: req.params.id, user: req.user._id });
+
+    if (!expense) return res.status(404).json({ message: 'Expense not found' });
+
+    await expense.remove();
+    res.json({ message: 'Expense deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Delete failed', error: err.message });
+  }
+});
+
 module.exports = router;
