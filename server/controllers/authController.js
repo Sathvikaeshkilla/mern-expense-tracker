@@ -36,11 +36,34 @@ const loginUser = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
+
+    if (!user) {
       const error = new Error('Invalid email or password');
       error.statusCode = 401;
       return next(error);
     }
+
+    if (user.isLocked()) {
+      const error = new Error('Account is locked due to too many failed login attempts');
+      error.statusCode = 423; // Locked
+      return next(error);
+    }
+
+    if (!(await user.matchPassword(password))) {
+      user.failedAttempts += 1;
+      if (user.failedAttempts >= 5) {
+        user.lockUntil = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
+      }
+      await user.save();
+      const error = new Error('Invalid email or password');
+      error.statusCode = 401;
+      return next(error);
+    }
+
+    // Successful login
+    user.failedAttempts = 0;
+    user.lockUntil = undefined;
+    await user.save();
 
     res.json({
       _id: user._id,
