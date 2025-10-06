@@ -12,7 +12,7 @@ const router = express.Router();
 
 // @route   GET /api/expenses
 // @desc    Get all expenses of the logged-in user
-router.get("/", protect, validateGetExpenses, async (req, res) => {
+router.get("/", protect, validateGetExpenses, async (req, res, next) => {
   try {
     const { category, from, to, sortBy = "date", order = "desc" } = req.query;
 
@@ -36,16 +36,14 @@ router.get("/", protect, validateGetExpenses, async (req, res) => {
 
     res.json(expenses);
   } catch (err) {
-    res.status(500).json({
-      message: "Error fetching expenses",
-      error: err.message,
-    });
+    err.message = "Error fetching expenses: " + err.message;
+    next(err);
   }
 });
 
 // @route   POST /api/expenses
 // @desc    Add a new expense for the logged-in user
-router.post("/", protect, validateCreateExpense, async (req, res) => {
+router.post("/", protect, validateCreateExpense, async (req, res, next) => {
   try {
     const { title, amount, category, date } = req.body;
 
@@ -60,16 +58,15 @@ router.post("/", protect, validateCreateExpense, async (req, res) => {
     const savedExpense = await newExpense.save();
     res.status(201).json(savedExpense);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error adding expense", error: err.message });
+    err.message = "Error adding expense: " + err.message;
+    next(err);
   }
 });
 
 // ✅ NEW: Update route for editing expenses
 // @route   PUT /api/expenses/:id
 // @desc    Update an existing expense
-router.put("/:id", protect, validateUpdateExpense, async (req, res) => {
+router.put("/:id", protect, validateUpdateExpense, async (req, res, next) => {
   try {
     const { title, amount, category, date } = req.body;
 
@@ -78,7 +75,11 @@ router.put("/:id", protect, validateUpdateExpense, async (req, res) => {
       user: req.user._id,
     });
 
-    if (!expense) return res.status(404).json({ message: "Expense not found" });
+    if (!expense) {
+      const error = new Error("Expense not found");
+      error.statusCode = 404;
+      return next(error);
+    }
 
     expense.title = title;
     expense.amount = amount;
@@ -88,11 +89,12 @@ router.put("/:id", protect, validateUpdateExpense, async (req, res) => {
     const updated = await expense.save();
     res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Update failed", error: err.message });
+    err.message = "Update failed: " + err.message;
+    next(err);
   }
 });
 // @route   DELETE /api/expenses/:id
-router.delete("/:id", protect, validateDeleteExpense, async (req, res) => {
+router.delete("/:id", protect, validateDeleteExpense, async (req, res, next) => {
   try {
     const deletedExpense = await Expense.findOneAndDelete({
       _id: req.params.id,
@@ -100,13 +102,16 @@ router.delete("/:id", protect, validateDeleteExpense, async (req, res) => {
     });
 
     if (!deletedExpense) {
-      return res.status(404).json({ message: "Expense not found" });
+      const error = new Error("Expense not found");
+      error.statusCode = 404;
+      return next(error);
     }
 
     res.json({ message: "Expense deleted successfully", expense: deletedExpense });
   } catch (err) {
     console.error("Delete error:", err);
-    res.status(500).json({ message: "Delete failed", error: err.message });
+    err.message = "Delete failed: " + err.message;
+    next(err);
   }
 });
 module.exports = router;

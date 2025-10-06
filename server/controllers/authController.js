@@ -7,12 +7,16 @@ const generateToken = (id) => {
   });
 };
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: 'User already exists' });
+    if (userExists) {
+      const error = new Error('User already exists');
+      error.statusCode = 400;
+      return next(error);
+    }
 
     const user = await User.create({ email, password });
 
@@ -22,17 +26,20 @@ const registerUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (err) {
-    res.status(500).json({ message: 'Registration failed', error: err.message });
+    err.message = 'Registration failed: ' + err.message;
+    next(err);
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      const error = new Error('Invalid email or password');
+      error.statusCode = 401;
+      return next(error);
     }
 
     res.json({
@@ -41,7 +48,8 @@ const loginUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (err) {
-    res.status(500).json({ message: 'Login failed', error: err.message });
+    err.message = 'Login failed: ' + err.message;
+    next(err);
   }
 };
 
