@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function ExpenseList({ expenses: initialExpenses }) {
+export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
   const [expenses, setExpenses] = useState(initialExpenses || []);
   const [sortBy, setSortBy] = useState("date-desc");
   const [editId, setEditId] = useState(null);
@@ -169,7 +169,7 @@ export default function ExpenseList({ expenses: initialExpenses }) {
           {filteredAndSortedExpenses.map((expense) => (
             <li
               key={expense._id}
-              className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4"
+              className={`${darkMode ? "bg-blue-100": "bg-white"} border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4`}
             >
               {editId === expense._id ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 w-full">
