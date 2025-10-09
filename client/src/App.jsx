@@ -19,11 +19,11 @@ function App() {
   const fetchExpenses = async () => {
     if (!token) return;
     try {
-      const res = await axios.get("http://localhost:5000/api/expenses", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/api/expenses`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       setExpenses(res.data);
     } catch (err) {
       console.error("Error fetching expenses:", err);

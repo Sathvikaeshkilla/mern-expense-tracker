@@ -8,10 +8,10 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password,
-      });
+      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/api/auth/login`, {
+          email,
+          password,
+        });
 
       // Save token
       localStorage.setItem('token', res.data.token);
