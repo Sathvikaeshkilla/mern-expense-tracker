@@ -63,36 +63,38 @@ Prerequisites 🧾
 - MongoDB (local or Atlas)
 - Git
 
-Clone the repository ⤵️
+### Setup Instructions
 
-```powershell
-git clone https://github.com/Sathvikaeshkilla/mern-expense-tracker.git
-```
-```powershell
-cd mern-expense-tracker
-```
+1. **Clone the Repository**
 
-Install server dependencies
+   * Run: `git clone https://github.com/Sathvikaeshkilla/mern-expense-tracker.git`
+   * Navigate into the folder: `cd mern-expense-tracker`
 
-```powershell
-cd server; npm install
-```
+2. **Backend Setup**
 
-Install client dependencies
+   * Go to backend folder (if separate): `cd server`
+   * Install dependencies: `npm install`
+   * Create a `.env` file with:
 
-```powershell
-cd ../client; npm install
-```
+     ```
+     MONGO_URI=your_mongodb_connection_string
+     JWT_SECRET=your_secret_key
+     PORT=5000
+     ```
+   * Start the backend server: `npm start`
+   * Backend runs at `http://localhost:5000`
 
-Run in development (two terminals)
+3. **Frontend Setup**
 
-```powershell
-# Terminal 1 - server
-cd server; npm run dev
+   * Go to frontend folder (if separate): `cd client`
+   * Install dependencies: `npm install`
+   * Start the frontend server: `npm run dev`
+   * Frontend runs at `http://localhost:5173` (or the port shown in terminal)
 
-# Terminal 2 - client
-cd client; npm run dev
-```
+4. **Access the Application**
+
+   * Open your browser at `http://localhost:5173`
+   * Make sure the backend server is running at the same time
 
 ## Contributing 🤝
 
