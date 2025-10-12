@@ -53,9 +53,9 @@ function App() {
     >
       <div className="max-w-4xl mx-auto bg-slate-200 rounded-xl shadow p-4 sm:p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-green-600 dark:text-violet-800">
+          <Link className="text-3xl font-bold text-green-600 dark:text-violet-800" to={""}>
             💰 Expense Tracker
-          </h1>
+          </Link>
           <button
             onClick={toggleDarkMode}
             className="text-sm px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
