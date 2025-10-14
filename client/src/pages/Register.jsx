@@ -16,6 +16,7 @@ function Register() {
       // Save token to localStorage
       localStorage.setItem('token', res.data.token);
       alert('Registration successful!');
+      window.location.href = '/add';
     } catch (err) {
       alert(err.response.data.message || 'Registration failed');
     }

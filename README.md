@@ -15,7 +15,7 @@ A full-stack Expense Tracker application built with the MERN stack (MongoDB, Exp
 
   <!-- Polished SVG header + subtitle -->
   <p>
-    <img alt="hero" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='760' height='110' viewBox='0 0 760 110'><style>.h{font:800 28px/1.1 system-ui,Segoe UI,Roboto,Arial;fill:%2300450b}.s{font:400 14px/1.3 system-ui,Segoe UI,Roboto,Arial;fill:%23555}</style><rect width='100%' height='100%' fill='transparent' /><text x='0' y='38' class='h'>MERN Expense Tracker</text><text x='0' y='64' class='s'>Track, visualize, and manage your expenses — secure auth, charts, and a responsive UI</text><line x1='0' y1='74' x2='520' y2='74' stroke='%2300a86b' stroke-width='2' opacity='0.9' stroke-linecap='round' /></svg>" style='max-width:760px; width:90%; height:auto;' />
+    <img src="./client/src/assets/logo.svg" alt="MERN Expense Tracker" width="760"/>
   </p>
 
   <!-- Tech badges -->
@@ -32,7 +32,6 @@ A full-stack Expense Tracker application built with the MERN stack (MongoDB, Exp
 </div>
 
 ---
-
 
 ## Highlights ✨
 
@@ -59,7 +58,7 @@ Backend 🧩
 
 Prerequisites 🧾
 
-- Node.js (v16+ recommended)
+- Node.js (v20+ recommended as Vite requires Node.js version 20.19+ or 22.12+)
 - MongoDB (local or Atlas)
 - Git
 
@@ -68,6 +67,7 @@ Clone the repository ⤵️
 ```powershell
 git clone https://github.com/Sathvikaeshkilla/mern-expense-tracker.git
 ```
+
 ```powershell
 cd mern-expense-tracker
 ```
@@ -88,7 +88,7 @@ Run in development (two terminals)
 
 ```powershell
 # Terminal 1 - server
-cd server; npm run dev
+cd server; npm start
 
 # Terminal 2 - client
 cd client; npm run dev
@@ -121,9 +121,4 @@ For Hacktoberfest 2025: label your PR with `hacktoberfest` if it follows the pro
 ---
 
 Maintainer: Assigned — coordinate via GitHub issues. 🧑‍🔧
-
-
-
-
-
 
