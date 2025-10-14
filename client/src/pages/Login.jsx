@@ -16,6 +16,7 @@ function Login() {
       // Save token
       localStorage.setItem('token', res.data.token);
       alert('Login successful!');
+      window.location.href = '/add';
     } catch (err) {
       alert(err.response.data.message || 'Login failed');
     }
