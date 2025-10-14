@@ -1,13 +1,25 @@
 const express = require("express");
 const Expense = require("../models/Expense");
 const protect = require("../middleware/authMiddleware");
+
+const {
+  validateCreateExpense,
+  validateUpdateExpense,
+  validateGetExpenses,
+  validateDeleteExpense,
+} = require("../middleware/validationMiddleware");
+
 const { body, param, query } = require('express-validator');
 const validate = require('../middleware/validate');
+
 
 const router = express.Router();
 
 // @route   GET /api/expenses
 // @desc    Get all expenses of the logged-in user
+
+router.get("/", protect, validateGetExpenses, async (req, res) => {
+
 router.get(
   "/",
   protect,
@@ -20,6 +32,7 @@ router.get(
   ],
   validate,
   async (req, res) => {
+
   try {
     const { category, from, to, sortBy = "date", order = "desc" } = req.query;
 
@@ -52,6 +65,9 @@ router.get(
 
 // @route   POST /api/expenses
 // @desc    Add a new expense for the logged-in user
+
+router.post("/", protect, validateCreateExpense, async (req, res) => {
+
 router.post(
   "/",
   protect,
@@ -63,6 +79,7 @@ router.post(
   ],
   validate,
   async (req, res) => {
+
   try {
     const { title, amount, category, date } = req.body;
 
@@ -86,6 +103,9 @@ router.post(
 // ✅ NEW: Update route for editing expenses
 // @route   PUT /api/expenses/:id
 // @desc    Update an existing expense
+
+router.put("/:id", protect, validateUpdateExpense, async (req, res) => {
+
 router.put(
   "/:id",
   protect,
@@ -98,6 +118,7 @@ router.put(
   ],
   validate,
   async (req, res) => {
+
   try {
     const { title, amount, category, date } = req.body;
 
@@ -120,12 +141,16 @@ router.put(
   }
 });
 // @route   DELETE /api/expenses/:id
+
+router.delete("/:id", protect, validateDeleteExpense, async (req, res) => {
+
 router.delete(
   "/:id",
   protect,
   [param('id').isMongoId()],
   validate,
   async (req, res) => {
+
   try {
     const deletedExpense = await Expense.findOneAndDelete({
       _id: req.params.id,
