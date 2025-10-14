@@ -3,6 +3,14 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { registerUser, loginUser } = require('../controllers/authController');
+
+const { validateRegister, validateLogin } = require('../middleware/validationMiddleware');
+
+const router = express.Router();
+
+router.post('/register', validateRegister, registerUser);
+router.post('/login', validateLogin, loginUser);
+
 const validate = require('../middleware/validate');
 
 const router = express.Router();
@@ -29,5 +37,6 @@ router.post(
   validate,
   loginUser
 );
+
 
 module.exports = router;
