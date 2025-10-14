@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const mongoSanitize = require('express-mongo-sanitize');
 const dotenv = require('dotenv');
 const expenseRoutes = require('./routes/expenseRoutes'); // Make sure this path is correct
 const authRoutes = require('./routes/authRoutes');
@@ -12,6 +15,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middlewares
 app.use(cors());
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
 app.use(express.json());
 
 // Routes
