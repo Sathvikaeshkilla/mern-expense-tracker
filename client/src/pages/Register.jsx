@@ -5,10 +5,19 @@ import { useNavigate } from "react-router-dom";
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate =  useNavigate();
+  // 1. ✨ Added state for the confirm password field
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    // 2. ✨ Check if the passwords match before sending the request
+    if (password !== confirmPassword) {
+      alert("Passwords do not match! Please try again. 😉");
+      return; // Stop the function if they don't match
+    }
+
     try {
       const res = await axios.post("http://localhost:5000/api/auth/register", {
         email,
@@ -17,10 +26,10 @@ function Register() {
 
       // Save token to localStorage
       localStorage.setItem("token", res.data.token);
-      alert("Registration successful!");
+      alert("Registration successful! Welcome aboard! 🚀");
       navigate('/add');
     } catch (err) {
-      alert(err.response.data.message || "Registration failed");
+      alert(err.response?.data?.message || "Registration failed");
     }
   };
 
@@ -36,6 +45,7 @@ function Register() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="w-full border p-2 rounded"
+        required
       />
       <input
         type="password"
@@ -43,10 +53,20 @@ function Register() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="w-full border p-2 rounded"
+        required
+      />
+      {/* 3. ✨ Added the new input field for confirming the password */}
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        className="w-full border p-2 rounded"
+        required
       />
       <button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
         Register
       </button>
