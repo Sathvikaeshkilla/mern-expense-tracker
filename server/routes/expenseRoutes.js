@@ -1,8 +1,9 @@
-const express = require("express");
-const Expense = require("../models/Expense");
-const protect = require("../middleware/authMiddleware");
-const { body, param, query } = require('express-validator');
-const validate = require('../middleware/validate');
+import express from 'express';
+import Expense from '../models/Expense.js';
+import protect from '../middleware/authMiddleware.js';
+import { body, param, query } from 'express-validator';
+import validate from '../middleware/validate.js';
+
 
 const router = express.Router();
 
@@ -142,4 +143,4 @@ router.delete(
     res.status(500).json({ message: "Delete failed", error: err.message });
   }
 });
-module.exports = router;
+export default router;
