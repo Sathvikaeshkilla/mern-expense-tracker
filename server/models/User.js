@@ -11,6 +11,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  failedAttempts: {
+    type: Number,
+    default: 0,
+  },
+  lockUntil: {
+    type: Date,
+  },
 });
 
 // ✅ Pre-save hook to hash password
@@ -25,6 +32,11 @@ userSchema.pre('save', async function (next) {
 // ✅ Method to compare entered password with hashed password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Method to check if account is locked
+userSchema.methods.isLocked = function () {
+  return this.lockUntil && this.lockUntil > Date.now();
 };
 
 const User = mongoose.model('User', userSchema);

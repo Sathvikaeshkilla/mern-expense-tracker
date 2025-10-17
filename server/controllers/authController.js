@@ -7,12 +7,16 @@ const generateToken = (id) => {
   });
 };
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: 'User already exists' });
+    if (userExists) {
+      const error = new Error('User already exists');
+      error.statusCode = 400;
+      return next(error);
+    }
 
     const user = await User.create({ email, password });
 
@@ -22,18 +26,44 @@ const registerUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (err) {
-    res.status(500).json({ message: 'Registration failed', error: err.message });
+    err.message = 'Registration failed: ' + err.message;
+    next(err);
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+
+    if (!user) {
+      const error = new Error('Invalid email or password');
+      error.statusCode = 401;
+      return next(error);
     }
+
+    if (user.isLocked()) {
+      const error = new Error('Account is locked due to too many failed login attempts');
+      error.statusCode = 423; // Locked
+      return next(error);
+    }
+
+    if (!(await user.matchPassword(password))) {
+      user.failedAttempts += 1;
+      if (user.failedAttempts >= 5) {
+        user.lockUntil = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
+      }
+      await user.save();
+      const error = new Error('Invalid email or password');
+      error.statusCode = 401;
+      return next(error);
+    }
+
+    // Successful login
+    user.failedAttempts = 0;
+    user.lockUntil = undefined;
+    await user.save();
 
     res.json({
       _id: user._id,
@@ -41,7 +71,8 @@ const loginUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (err) {
-    res.status(500).json({ message: 'Login failed', error: err.message });
+    err.message = 'Login failed: ' + err.message;
+    next(err);
   }
 };
 

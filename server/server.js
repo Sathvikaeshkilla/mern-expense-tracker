@@ -24,6 +24,10 @@ app.use(express.json());
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/auth', authRoutes);
 
+// Error handling middleware (must be last)
+const errorHandler = require('./middleware/errorMiddleware');
+app.use(errorHandler);
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
