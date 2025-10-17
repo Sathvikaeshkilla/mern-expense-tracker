@@ -2,9 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start:dev": "node server.js",
+    "build:server": "vite build --config vite.server.config.js",
+    "start:prod": "node dist/server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +24,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
     "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "rollup-plugin-node-externals": "^8.1.1",
+    "vite": "^7.1.10"
   }
 }
