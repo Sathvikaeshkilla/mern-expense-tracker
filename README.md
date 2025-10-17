@@ -88,7 +88,7 @@ Run in development (two terminals)
 
 ```powershell
 # Terminal 1 - server
-cd server; npm start
+cd server; npm start:dev
 
 # Terminal 2 - client
 cd client; npm run dev
