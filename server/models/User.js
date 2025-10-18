@@ -9,13 +9,25 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false, // Not required for OAuth users
+  },
+  githubId: {
+    type: String,
+    sparse: true,
+    unique: true,
+  },
+  name: {
+    type: String,
+  },
+  avatarUrl: {
+    type: String,
   },
 });
 
 // ✅ Pre-save hook to hash password
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  // Skip hashing if password is not modified or doesn't exist (OAuth users)
+  if (!this.isModified('password') || !this.password) return next();
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

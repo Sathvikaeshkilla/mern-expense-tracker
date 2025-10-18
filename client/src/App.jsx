@@ -7,6 +7,7 @@ import Summary from "./components/Summary";
 import ExpenseChart from "./components/ExpenseChart";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import AuthCallback from "./pages/AuthCallback";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -126,6 +127,7 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/add" element={<ExpenseForm onAdd={fetchExpenses} darkMode={darkMode}/>} />
           <Route
             path="/history"
