@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [loginSuccess, setLoginSuccess] = useState(false);
   const navigate = useNavigate();
+const location = useLocation();
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const token = params.get('token');
+  if (token) {
+    localStorage.setItem('token', token);
+    navigate('/add');
+  }
+}, [location]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
