@@ -49,3 +49,15 @@ module.exports = {
   registerUser,
   loginUser,
 };
+
+
+const googleAuth = (req, res) => {
+  // Passport attaches user object to req.user
+  res.redirect(`http://localhost:5173/login?token=${req.user.token}`);
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  googleAuth,
+};
