@@ -57,7 +57,7 @@ const COLORS = [
   "#FF8042",
 ];
 
-export default function ExpenseChart({ expenses }) {
+export default function ExpenseChart({ expenses, darkMode }) {
   // Group by category
   const data = Object.values(
     expenses.reduce((acc, curr) => {
@@ -79,7 +79,7 @@ export default function ExpenseChart({ expenses }) {
   if (data.length === 0) return null;
 
   return (
-    <div className="mt-6 p-4 bg-white shadow rounded">
+    <div className={`mt-6 p-4 ${darkMode ? "bg-blue-100": "bg-white"} shadow rounded`}>
       <h2 className="text-lg font-semibold mb-4">📊 Expense Chart</h2>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
