@@ -25,10 +25,10 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
       if (filterDateRange.from) params.from = filterDateRange.from;
       if (filterDateRange.to) params.to = filterDateRange.to;
 
-      const res = await axios.get("http://localhost:5000/api/expenses", {
-        headers: { Authorization: `Bearer ${token}` },
-        params,
-      });
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_BASE_URL}/api/expenses`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params,
+        });
 
       setExpenses(res.data);
     } catch (err) {
@@ -48,9 +48,12 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
       return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/expenses/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/api/expenses/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setExpenses((prev) => prev.filter((e) => e._id !== id));
     } catch (err) {
       console.error("Delete error:", err);
@@ -74,7 +77,7 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        `http://localhost:5000/api/expenses/${id}`,
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/api/expenses/${id}`,
         { ...editForm, amount: Number(editForm.amount) }, // ensure amount is a number
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -88,40 +91,40 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
       alert("❌ Could not update expense");
     }
   };
- const filteredAndSortedExpenses = expenses
-  .filter((expense) => {
-    if (
-      filterCategory &&
-      expense.category.toLowerCase() !== filterCategory.toLowerCase()
-    ) {
-      return false;
-    }
-    if (
-      filterDateRange.from &&
-      new Date(expense.date) < new Date(filterDateRange.from)
-    ) {
-      return false;
-    }
-    if (
-      filterDateRange.to &&
-      new Date(expense.date) > new Date(filterDateRange.to)
-    ) {
-      return false;
-    }
-    return true;
-  })
-  .sort((a, b) => {
-    if (sortBy === "date-asc") {
-      return new Date(a.date) - new Date(b.date);
-    } else if (sortBy === "date-desc") {
-      return new Date(b.date) - new Date(a.date);
-    } else if (sortBy === "category-asc") {
-      return a.category.localeCompare(b.category);
-    } else if (sortBy === "category-desc") {
-      return b.category.localeCompare(a.category);
-    }
-    return 0;
-  });
+  const filteredAndSortedExpenses = expenses
+    .filter((expense) => {
+      if (
+        filterCategory &&
+        expense.category.toLowerCase() !== filterCategory.toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        filterDateRange.from &&
+        new Date(expense.date) < new Date(filterDateRange.from)
+      ) {
+        return false;
+      }
+      if (
+        filterDateRange.to &&
+        new Date(expense.date) > new Date(filterDateRange.to)
+      ) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === "date-asc") {
+        return new Date(a.date) - new Date(b.date);
+      } else if (sortBy === "date-desc") {
+        return new Date(b.date) - new Date(a.date);
+      } else if (sortBy === "category-asc") {
+        return a.category.localeCompare(b.category);
+      } else if (sortBy === "category-desc") {
+        return b.category.localeCompare(a.category);
+      }
+      return 0;
+    });
   const categories = [...new Set(expenses.map((expense) => expense.category))];
 
   return (
