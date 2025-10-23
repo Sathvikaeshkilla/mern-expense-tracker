@@ -6,6 +6,9 @@ import validate from '../middleware/validate.js';
 
 const router = express.Router();
 
+require('../config/passport'); // load Google strategy
+const { googleAuth } = require('../controllers/authController');
+
 router.post(
   '/register',
   [
@@ -27,6 +30,16 @@ router.post(
   ],
   validate,
   loginUser
+);
+
+// Start Google login
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Google OAuth callback
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false }),
+  googleAuth
 );
 
 export default router;

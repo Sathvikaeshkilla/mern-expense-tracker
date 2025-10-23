@@ -84,6 +84,14 @@ Install client dependencies
 cd ../client; npm install
 ```
 
+Environment Variables : 
+
+Create a `.env` file in the `server` directory based on `.env.example`:
+
+```bash
+cp server/.env.example server/.env
+```
+
 Run in development (two terminals)
 
 ```powershell
