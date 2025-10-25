@@ -14,6 +14,7 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
   const [filterCategory, setFilterCategory] = useState("");
   const [filterDateRange, setFilterDateRange] = useState({ from: "", to: "" });
   const [loading, setLoading] = useState(false);
+  const [sortBy, setSortBy] = useState("date-desc");
 
   // Fetch expenses from backend (with filters)
   const fetchExpenses = async () => {
@@ -88,40 +89,40 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
       alert("❌ Could not update expense");
     }
   };
- const filteredAndSortedExpenses = expenses
-  .filter((expense) => {
-    if (
-      filterCategory &&
-      expense.category.toLowerCase() !== filterCategory.toLowerCase()
-    ) {
-      return false;
-    }
-    if (
-      filterDateRange.from &&
-      new Date(expense.date) < new Date(filterDateRange.from)
-    ) {
-      return false;
-    }
-    if (
-      filterDateRange.to &&
-      new Date(expense.date) > new Date(filterDateRange.to)
-    ) {
-      return false;
-    }
-    return true;
-  })
-  .sort((a, b) => {
-    if (sortBy === "date-asc") {
-      return new Date(a.date) - new Date(b.date);
-    } else if (sortBy === "date-desc") {
-      return new Date(b.date) - new Date(a.date);
-    } else if (sortBy === "category-asc") {
-      return a.category.localeCompare(b.category);
-    } else if (sortBy === "category-desc") {
-      return b.category.localeCompare(a.category);
-    }
-    return 0;
-  });
+  const filteredAndSortedExpenses = expenses
+    .filter((expense) => {
+      if (
+        filterCategory &&
+        expense.category.toLowerCase() !== filterCategory.toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        filterDateRange.from &&
+        new Date(expense.date) < new Date(filterDateRange.from)
+      ) {
+        return false;
+      }
+      if (
+        filterDateRange.to &&
+        new Date(expense.date) > new Date(filterDateRange.to)
+      ) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === "date-asc") {
+        return new Date(a.date) - new Date(b.date);
+      } else if (sortBy === "date-desc") {
+        return new Date(b.date) - new Date(a.date);
+      } else if (sortBy === "category-asc") {
+        return a.category.localeCompare(b.category);
+      } else if (sortBy === "category-desc") {
+        return b.category.localeCompare(a.category);
+      }
+      return 0;
+    });
   const categories = [...new Set(expenses.map((expense) => expense.category))];
 
   return (
@@ -156,6 +157,22 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
             }
             className="border px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
           />
+        </div>
+        <div className="flex items-center gap-2 border px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-400">
+          <label htmlFor="sort" className="font-medium text-gray-700">
+            Sort by:
+          </label>
+          <select
+            id="sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          >
+            <option value="date-desc">Date (Newest first)</option>
+            <option value="date-asc">Date (Oldest first)</option>
+            <option value="category-asc">Category (A–Z)</option>
+            <option value="category-desc">Category (Z–A)</option>
+          </select>
         </div>
       </div>
 
