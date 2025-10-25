@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+//server/controllers/authController.js
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -7,7 +8,7 @@ const generateToken = (id) => {
   });
 };
 
-const registerUser = async (req, res) => {
+export const registerUser = async (req, res) => { 
   const { email, password } = req.body;
 
   try {
@@ -26,7 +27,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+export const loginUser = async (req, res) => { 
   const { email, password } = req.body;
 
   try {
@@ -45,19 +46,8 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = {
-  registerUser,
-  loginUser,
-};
 
-
-const googleAuth = (req, res) => {
+export const googleAuth = (req, res) => {
   // Passport attaches user object to req.user
   res.redirect(`http://localhost:5173/login?token=${req.user.token}`);
-};
-
-module.exports = {
-  registerUser,
-  loginUser,
-  googleAuth,
 };

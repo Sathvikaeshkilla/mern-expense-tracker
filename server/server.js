@@ -1,14 +1,13 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const xss = require('xss-clean');
-const mongoSanitize = require('express-mongo-sanitize');
-const dotenv = require('dotenv');
-const expenseRoutes = require('./routes/expenseRoutes'); // Make sure this path is correct
-const authRoutes = require('./routes/authRoutes');
-
-dotenv.config(); // Load environment variables
+//server/server.js
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
+import 'dotenv/config'; 
+import expenseRoutes from './routes/expenseRoutes.js'; 
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;

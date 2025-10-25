@@ -1,10 +1,8 @@
-
-
-const express = require('express');
-const { body } = require('express-validator');
-const { registerUser, loginUser } = require('../controllers/authController');
-const validate = require('../middleware/validate');
-const passport = require('passport');
+//server/routes/authRoutes.js
+import express from 'express';
+import { body } from 'express-validator';
+import { registerUser, loginUser } from '../controllers/authController.js'; 
+import validate from '../middleware/validate.js'; 
 
 const router = express.Router();
 
@@ -44,4 +42,4 @@ router.get(
   googleAuth
 );
 
-module.exports = router;
+export default router;
