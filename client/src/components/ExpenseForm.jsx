@@ -15,7 +15,7 @@ export default function ExpenseForm({ onAdd, darkMode}) {
       const token = localStorage.getItem("token"); // 🔐 Get token
 
       await axios.post(
-        "http://localhost:5000/api/expenses",
+        `${import.meta.env.VITE_REACT_APP_BASE_URL}/api/expenses`,
         { title, amount, category, date }, // ✅ Send date too
         {
           headers: {
