@@ -14,7 +14,7 @@ export default function ExpenseList({ expenses: initialExpenses, darkMode }) {
   const [filterCategory, setFilterCategory] = useState("");
   const [filterDateRange, setFilterDateRange] = useState({ from: "", to: "" });
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState("date-desc");
+  // const [sortBy, setSortBy] = useState("date-desc");
 
   // Fetch expenses from backend (with filters)
   const fetchExpenses = async () => {
